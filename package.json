@@ -1,0 +1,15 @@
+{
+  "name": "personal-poe2-build-generator",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "recommend": "node src/cli.js recommend",
+    "diff": "node src/cli.js diff",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
+

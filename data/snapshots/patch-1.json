@@ -1,0 +1,27 @@
+{
+  "version": "patch-1",
+  "entities": [
+    {
+      "id": "mod.ignite_magnitude",
+      "type": "modifier",
+      "name": "increased Ignite Magnitude",
+      "tags": ["ignite", "ailment_magnitude"],
+      "value": 16
+    },
+    {
+      "id": "unique.emberwake_mock",
+      "type": "uniqueItem",
+      "name": "Emberwake Prototype",
+      "tags": ["fire", "ignite", "ailment"],
+      "value": null
+    },
+    {
+      "id": "lineage.arakaalis_lust",
+      "type": "lineageSupportGem",
+      "name": "Arakaali's Lust",
+      "tags": ["chaos", "poison", "hit"],
+      "value": null
+    }
+  ]
+}
+

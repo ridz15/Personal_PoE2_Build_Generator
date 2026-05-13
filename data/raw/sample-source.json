@@ -1,0 +1,35 @@
+{
+  "version": "sample-source-0",
+  "records": [
+    {
+      "kind": "active_skill",
+      "key": "firebolt",
+      "displayName": "Firebolt",
+      "tags": ["Fire", "Spell", "Projectile", "Hit"],
+      "mechanics": ["Ignite"],
+      "scalesWith": ["Fire", "Spell", "Projectile", "Cast Speed", "Critical", "Ignite", "Gem Level"]
+    },
+    {
+      "kind": "support",
+      "key": "burning_support",
+      "displayName": "Burning Support",
+      "tags": ["Fire", "Ailment"],
+      "requiresAnyTag": ["Fire", "Hit"],
+      "requiresAllTags": ["Hit"],
+      "requiresAnyTags": ["Fire"],
+      "forbiddenTags": [],
+      "mechanicRequirements": ["Ignite"],
+      "grants": ["Ignite", "Ailment Magnitude"],
+      "tier": "starter"
+    },
+    {
+      "kind": "modifier",
+      "key": "cultivated_plus_fire_level",
+      "displayName": "Cultivated: +1 to Level of Fire Skills",
+      "stat": "plus_fire_skill_level",
+      "value": 1,
+      "appliesTo": ["Cultivated Unique"],
+      "tags": ["Fire", "Gem Level", "Cultivated"]
+    }
+  ]
+}

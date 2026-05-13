@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PoE2 Build Generator</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="workspace">
+        <div class="query-panel">
+          <div>
+            <p class="eyebrow">Patch-aware prototype</p>
+            <h1>PoE2 Build Generator</h1>
+          </div>
+          <form id="build-form">
+            <label for="query">Build request</label>
+            <div class="input-row">
+              <input id="query" name="query" value="poison projectile bow mid damage" autocomplete="off">
+              <button type="submit">Generate</button>
+            </div>
+          </form>
+          <div class="examples" aria-label="Examples">
+            <button type="button" data-query="fire ignite spell mid balanced">Fire ignite</button>
+            <button type="button" data-query="poison projectile bow mid damage">Poison bow</button>
+            <button type="button" data-query="defense spirit endgame tanky">Spirit defense</button>
+          </div>
+        </div>
+
+        <section class="summary-grid" id="summary"></section>
+        <section class="results" id="results"></section>
+      </section>
+    </main>
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
+

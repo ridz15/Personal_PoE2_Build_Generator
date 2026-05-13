@@ -14,8 +14,11 @@ This repository starts as a dependency-free JavaScript prototype. The first goal
 
 ```powershell
 node src/cli.js recommend "fire ignite spell starter balanced"
+node src/cli.js recommend "poison projectile bow mid damage" --format pretty
 node src/cli.js diff data/snapshots/patch-0.json data/snapshots/patch-1.json
 node src/cli.js normalize data/raw/sample-source.json
+node src/cli.js import data/raw/sample-source.json
+node src/server.js
 node --test
 ```
 
@@ -32,6 +35,20 @@ The current data is intentionally tiny fixture data. It exists to prove the arch
 - archetypes
 
 Real PoE2 data can be imported later through a normalizer layer without changing the generator API.
+
+## Local UI
+
+Run:
+
+```powershell
+node src/server.js
+```
+
+Then open:
+
+```text
+http://localhost:4173
+```
 
 ## Data Import Direction
 

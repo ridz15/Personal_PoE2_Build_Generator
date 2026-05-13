@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import { resolve } from "node:path";
+import { mkdir, writeFile } from "node:fs/promises";
 import { loadJson } from "./data/loadJson.js";
+import { formatRecommendation } from "./format/pretty.js";
 import { normalizeRawData, toPatchSnapshot } from "./data/normalize.js";
 import { recommendBuild } from "./generator/recommendationEngine.js";
 import { affectedArchetypes, diffSnapshots, summarizePatchImpact } from "./patch/diffEngine.js";
@@ -11,7 +13,7 @@ async function main() {
   const [command, ...args] = process.argv.slice(2);
 
   if (command === "recommend") {
-    await recommend(args.join(" "));
+    await recommend(args);
     return;
   }
 
@@ -25,17 +27,29 @@ async function main() {
     return;
   }
 
+  if (command === "import") {
+    await importData(args[0], args[1]);
+    return;
+  }
+
   printUsage();
   process.exitCode = 1;
 }
 
-async function recommend(input) {
+async function recommend(args) {
+  const { values, options } = parseArgs(args);
+  const input = values.join(" ");
   if (!input) {
     throw new Error("Missing build request. Example: node src/cli.js recommend \"fire ignite spell starter\"");
   }
 
   const gameData = await loadJson(resolve(DEFAULT_DATA_PATH));
   const result = recommendBuild(input, gameData);
+
+  if (options.format === "pretty" || options.pretty) {
+    console.log(formatRecommendation(result));
+    return;
+  }
 
   console.log(JSON.stringify(result, null, 2));
 }
@@ -75,11 +89,54 @@ async function normalize(rawPath) {
   }, null, 2));
 }
 
+async function importData(rawPath, outPath = "data/normalized/imported-game-data.json") {
+  if (!rawPath) {
+    throw new Error("Missing raw source path. Example: node src/cli.js import data/raw/sample-source.json");
+  }
+
+  const rawSource = await loadJson(resolve(rawPath));
+  const normalized = normalizeRawData(rawSource);
+  const destination = resolve(outPath);
+  await mkdir(resolvePathDirectory(destination), { recursive: true });
+  await writeFile(destination, `${JSON.stringify(normalized, null, 2)}\n`, "utf8");
+
+  console.log(`Imported ${rawPath} -> ${outPath}`);
+}
+
+function resolvePathDirectory(path) {
+  return path.replace(/[\\/][^\\/]+$/u, "");
+}
+
+function parseArgs(args) {
+  const values = [];
+  const options = {};
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+    if (arg === "--pretty") {
+      options.pretty = true;
+      continue;
+    }
+
+    if (arg === "--format") {
+      options.format = args[index + 1];
+      index += 1;
+      continue;
+    }
+
+    values.push(arg);
+  }
+
+  return { values, options };
+}
+
 function printUsage() {
   console.log(`Usage:
   node src/cli.js recommend "fire ignite spell starter balanced"
+  node src/cli.js recommend "poison projectile bow mid damage" --format pretty
   node src/cli.js diff data/snapshots/patch-0.json data/snapshots/patch-1.json
-  node src/cli.js normalize data/raw/sample-source.json`);
+  node src/cli.js normalize data/raw/sample-source.json
+  node src/cli.js import data/raw/sample-source.json`);
 }
 
 main().catch((error) => {

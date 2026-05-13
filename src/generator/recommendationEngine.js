@@ -1,4 +1,6 @@
 import { parseBuildRequest } from "./requestParser.js";
+import { recommendCultivatedUpgrades } from "./cultivated.js";
+import { buildProgressionTiers } from "./progression.js";
 import { rankCandidates, scoreArchetype, scoreItemCandidate, scoreSupportCandidate } from "../scoring/tagScore.js";
 
 function topArchetypes(request, archetypes) {
@@ -25,7 +27,7 @@ export function recommendBuild(input, gameData) {
   const itemScorer = (itemRequest, itemArchetypes, item) =>
     scoreItemCandidate(itemRequest, itemArchetypes, item, gameData, primarySkills);
 
-  return {
+  const result = {
     request,
     archetypes,
     skills,
@@ -33,7 +35,13 @@ export function recommendBuild(input, gameData) {
     lineageSupportGems: rankCandidates(request, archetypes, gameData.lineageSupportGems ?? [], 4, supportScorer),
     uniqueItems: rankCandidates(request, archetypes, gameData.uniqueItems ?? [], 5, itemScorer),
     uniqueJewels: rankCandidates(request, archetypes, gameData.uniqueJewels ?? [], 5, itemScorer),
+    cultivatedUpgrades: recommendCultivatedUpgrades(request, archetypes, gameData.modifiers ?? []),
     statPriorities: buildStatPriorities(request, archetypes)
+  };
+
+  return {
+    ...result,
+    progressionTiers: buildProgressionTiers(result)
   };
 }
 

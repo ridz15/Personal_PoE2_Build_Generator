@@ -6,10 +6,10 @@
   "scripts": {
     "recommend": "node src/cli.js recommend",
     "diff": "node src/cli.js diff",
+    "start": "node src/server.js",
     "test": "node --test"
   },
   "engines": {
     "node": ">=20"
   }
 }
-

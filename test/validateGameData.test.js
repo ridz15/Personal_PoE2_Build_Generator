@@ -37,5 +37,6 @@ test("normalizes archetype records from curated packs", () => {
 
   assert.ok(normalized.archetypes.some((archetype) => archetype.id === "archetype.cold_projectile_attack"));
   assert.ok(normalized.skills.some((skill) => skill.id === "skill.ice_shot_mock"));
+  assert.ok(normalized.uniqueItems.some((item) => item.id === "unique.frost_fletched_quiver_mock"));
+  assert.ok(normalized.uniqueJewels.some((jewel) => jewel.id === "unique_jewel.winter_focus_jewel_mock"));
 });
-

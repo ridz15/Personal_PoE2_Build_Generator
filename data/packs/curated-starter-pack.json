@@ -39,7 +39,41 @@
       "value": 22,
       "appliesTo": ["Item", "Jewel"],
       "tags": ["Cold", "Damage"]
+    },
+    {
+      "kind": "modifier",
+      "key": "freeze_buildup",
+      "displayName": "increased Freeze Buildup",
+      "stat": "freeze_buildup",
+      "value": 18,
+      "appliesTo": ["Item", "Jewel"],
+      "tags": ["Cold", "Freeze", "Ailment"]
+    },
+    {
+      "kind": "unique_item",
+      "key": "frost_fletched_quiver_mock",
+      "displayName": "Frost-Fletched Quiver Prototype",
+      "slot": "Quiver",
+      "slotRequirements": {
+        "requiresAnyTags": ["Bow", "Projectile"],
+        "forbiddenTags": ["Spell"]
+      },
+      "roles": ["Damage", "Projectile Scaling", "Build Enabler"],
+      "tags": ["Cold", "Projectile", "Bow", "Freeze"],
+      "modifiers": ["cold_damage", "freeze_buildup"],
+      "buildEnablers": ["Freeze"],
+      "tier": "mid"
+    },
+    {
+      "kind": "unique_jewel",
+      "key": "winter_focus_jewel_mock",
+      "displayName": "Winter Focus Jewel Prototype",
+      "tags": ["Jewel", "Cold", "Critical"],
+      "roles": ["Scaling Multiplier"],
+      "modifiers": ["cold_damage"],
+      "radiusRules": [],
+      "treeInteractions": ["Projectile Cluster"],
+      "tier": "endgame"
     }
   ]
 }
-

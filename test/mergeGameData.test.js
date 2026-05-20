@@ -25,6 +25,8 @@ test("uses merged data for cold projectile recommendations", () => {
 
   assert.equal(recommendation.skills[0].id, "skill.ice_shot_mock");
   assert.ok(recommendation.supportGems.some((support) => support.id === "support.cold_penetration_mock"));
+  assert.equal(recommendation.uniqueItems[0].id, "unique.frost_fletched_quiver_mock");
+  assert.ok(recommendation.uniqueJewels.some((jewel) => jewel.id === "unique_jewel.winter_focus_jewel_mock"));
   assert.equal(recommendation.uniqueItems.some((item) => item.id === "unique.emberwake_mock"), false);
 });
 

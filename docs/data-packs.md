@@ -18,11 +18,11 @@ Supported by the current normalizer:
 - `lineage_support`
 - `modifier`
 - `archetype`
+- `unique_item`
+- `unique_jewel`
 
 Planned next:
 
-- `unique_item`
-- `unique_jewel`
 - `item_base`
 - `cultivated_modifier`
 

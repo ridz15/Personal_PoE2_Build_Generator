@@ -46,3 +46,42 @@ test("normalizes archetype records", () => {
   assert.deepEqual(normalized.archetypes[0].preferredStats, ["fire_damage"]);
   assert.equal(normalized.archetypes[0].budgetProfile, "mid");
 });
+
+test("normalizes unique item and jewel records", () => {
+  const normalized = normalizeRawData({
+    records: [
+      {
+        kind: "unique_item",
+        key: "test_quiver",
+        displayName: "Test Quiver",
+        slot: "Quiver",
+        slotRequirements: {
+          requiresAnyTags: ["Bow"],
+          forbiddenTags: ["Spell"]
+        },
+        roles: ["Damage"],
+        tags: ["Cold"],
+        modifiers: ["cold_damage"],
+        buildEnablers: ["Freeze"],
+        tier: "mid"
+      },
+      {
+        kind: "unique_jewel",
+        key: "test_jewel",
+        displayName: "Test Jewel",
+        tags: ["Jewel", "Cold"],
+        roles: ["Scaling Multiplier"],
+        modifiers: ["mod.cold_damage"],
+        radiusRules: ["Small"],
+        treeInteractions: ["Cold Cluster"],
+        tier: "endgame"
+      }
+    ]
+  });
+
+  assert.equal(normalized.uniqueItems[0].id, "unique.test_quiver");
+  assert.equal(normalized.uniqueItems[0].slot, "quiver");
+  assert.deepEqual(normalized.uniqueItems[0].modifiers, ["mod.cold_damage"]);
+  assert.equal(normalized.uniqueJewels[0].id, "unique_jewel.test_jewel");
+  assert.deepEqual(normalized.uniqueJewels[0].treeInteractions, ["cold_cluster"]);
+});

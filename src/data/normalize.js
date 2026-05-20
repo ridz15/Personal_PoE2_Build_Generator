@@ -86,6 +86,39 @@ function normalizeRecord(record) {
     };
   }
 
+  if (record.kind === "unique_item") {
+    return {
+      collection: "uniqueItems",
+      entity: {
+        id: `unique.${normalizeTag(record.key ?? record.displayName)}`,
+        name: record.displayName,
+        slot: normalizeTag(record.slot),
+        slotRequirements: normalizeSlotRequirements(record.slotRequirements),
+        roles: normalizeTags(record.roles),
+        tags: normalizeTags(record.tags),
+        modifiers: normalizeModifierRefs(record.modifiers),
+        buildEnablers: normalizeTags(record.buildEnablers),
+        stage: normalizeStage(record.tier)
+      }
+    };
+  }
+
+  if (record.kind === "unique_jewel") {
+    return {
+      collection: "uniqueJewels",
+      entity: {
+        id: `unique_jewel.${normalizeTag(record.key ?? record.displayName)}`,
+        name: record.displayName,
+        tags: normalizeTags(record.tags),
+        roles: normalizeTags(record.roles),
+        modifiers: normalizeModifierRefs(record.modifiers),
+        radiusRules: normalizeTags(record.radiusRules),
+        treeInteractions: normalizeTags(record.treeInteractions),
+        stage: normalizeStage(record.tier)
+      }
+    };
+  }
+
   if (record.kind === "archetype") {
     return {
       collection: "archetypes",
@@ -101,6 +134,18 @@ function normalizeRecord(record) {
   }
 
   return null;
+}
+
+function normalizeSlotRequirements(requirements = {}) {
+  return {
+    requiresAllTags: normalizeTags(requirements.requiresAllTags),
+    requiresAnyTags: normalizeTags(requirements.requiresAnyTags),
+    forbiddenTags: normalizeTags(requirements.forbiddenTags)
+  };
+}
+
+function normalizeModifierRefs(modifiers = []) {
+  return modifiers.map((modifier) => modifier.startsWith("mod.") ? modifier : `mod.${normalizeTag(modifier)}`);
 }
 
 export function toPatchSnapshot(normalizedData) {

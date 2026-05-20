@@ -16,7 +16,7 @@ set PORT=4173
 if exist "data\merged\game-data.json" (
   set DATA_PATH=data\merged\game-data.json
 ) else (
-  set DATA_PATH=data\fixtures\game-data.json
+  set DATA_PATH=data\app\base-game-data.json
 )
 
 echo Starting PoE2 Build Generator...

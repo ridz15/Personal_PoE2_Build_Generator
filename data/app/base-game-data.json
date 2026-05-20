@@ -1,0 +1,179 @@
+{
+  "skills": [
+    {
+      "id": "skill.firebolt",
+      "name": "Firebolt Prototype",
+      "tags": ["fire", "spell", "projectile", "hit"],
+      "mechanics": ["ignite"],
+      "scalingTags": ["fire", "spell", "projectile", "cast_speed", "critical", "ignite", "gem_level"]
+    },
+    {
+      "id": "skill.poison_barrage",
+      "name": "Poison Barrage Prototype",
+      "tags": ["chaos", "attack", "projectile", "bow", "hit"],
+      "mechanics": ["poison"],
+      "scalingTags": ["chaos", "attack", "projectile", "attack_speed", "poison", "ailment_magnitude"]
+    },
+    {
+      "id": "skill.ancestral_totem",
+      "name": "Ancestral Totem Prototype",
+      "tags": ["physical", "attack", "melee", "totem"],
+      "mechanics": ["totem"],
+      "scalingTags": ["physical", "attack", "melee", "totem", "attack_speed"]
+    }
+  ],
+  "supportGems": [
+    {
+      "id": "support.controlled_destruction",
+      "name": "Controlled Destruction Prototype",
+      "tags": ["spell", "damage"],
+      "compatibleTags": ["spell"],
+      "requiresAllTags": ["spell"],
+      "requiresAnyTags": [],
+      "forbiddenTags": ["attack"],
+      "mechanicRequirements": [],
+      "bonuses": ["spell"],
+      "restrictions": [],
+      "stage": "starter"
+    },
+    {
+      "id": "support.ignite_magnitude",
+      "name": "Ignite Magnitude Prototype",
+      "tags": ["fire", "ailment"],
+      "compatibleTags": ["fire", "hit"],
+      "requiresAllTags": ["hit"],
+      "requiresAnyTags": ["fire"],
+      "forbiddenTags": [],
+      "mechanicRequirements": ["ignite"],
+      "bonuses": ["ignite", "ailment_magnitude"],
+      "restrictions": [],
+      "stage": "starter"
+    },
+    {
+      "id": "support.scattershot",
+      "name": "Scattershot Prototype",
+      "tags": ["projectile"],
+      "compatibleTags": ["projectile"],
+      "requiresAllTags": ["projectile"],
+      "requiresAnyTags": [],
+      "forbiddenTags": [],
+      "mechanicRequirements": [],
+      "bonuses": ["projectile"],
+      "restrictions": ["less_single_target"],
+      "stage": "starter"
+    },
+    {
+      "id": "support.deadly_poison",
+      "name": "Deadly Poison Prototype",
+      "tags": ["chaos", "ailment"],
+      "compatibleTags": ["chaos", "hit"],
+      "requiresAllTags": ["hit"],
+      "requiresAnyTags": ["chaos"],
+      "forbiddenTags": ["spell"],
+      "mechanicRequirements": ["poison"],
+      "bonuses": ["poison", "ailment_magnitude"],
+      "restrictions": [],
+      "stage": "starter"
+    }
+  ],
+  "lineageSupportGems": [
+    {
+      "id": "lineage.arakaalis_lust",
+      "name": "Arakaali's Lust Prototype",
+      "tags": ["chaos", "poison", "hit"],
+      "compatibleTags": ["chaos", "hit"],
+      "requiresAllTags": ["hit"],
+      "requiresAnyTags": ["chaos"],
+      "forbiddenTags": [],
+      "mechanicRequirements": ["poison"],
+      "bonuses": ["poison", "chaos"],
+      "downsides": ["requires_poison_stacks"],
+      "dropSource": "restricted",
+      "stage": "endgame"
+    },
+    {
+      "id": "lineage.cirels_cultivation",
+      "name": "Cirel's Cultivation Prototype",
+      "tags": ["totem"],
+      "compatibleTags": ["totem"],
+      "requiresAllTags": ["totem"],
+      "requiresAnyTags": [],
+      "forbiddenTags": [],
+      "mechanicRequirements": ["totem"],
+      "bonuses": ["totem"],
+      "downsides": ["one_active_totem"],
+      "dropSource": "restricted",
+      "stage": "endgame"
+    }
+  ],
+  "uniqueItems": [],
+  "uniqueJewels": [],
+  "modifiers": [
+    {
+      "id": "mod.fire_damage",
+      "text": "increased Fire Damage",
+      "statKey": "fire_damage",
+      "value": 24,
+      "appliesTo": ["item", "jewel"],
+      "tags": ["fire", "damage"]
+    },
+    {
+      "id": "mod.ignite_magnitude",
+      "text": "increased Ignite Magnitude",
+      "statKey": "ignite_magnitude",
+      "value": 20,
+      "appliesTo": ["item", "jewel"],
+      "tags": ["ignite", "ailment_magnitude"]
+    },
+    {
+      "id": "mod.projectile_damage",
+      "text": "increased Projectile Damage",
+      "statKey": "projectile_damage",
+      "value": 18,
+      "appliesTo": ["item", "jewel"],
+      "tags": ["projectile", "damage"]
+    },
+    {
+      "id": "mod.poison_magnitude",
+      "text": "increased Poison Magnitude",
+      "statKey": "poison_magnitude",
+      "value": 18,
+      "appliesTo": ["item", "jewel"],
+      "tags": ["poison", "ailment_magnitude"]
+    },
+    {
+      "id": "mod.cultivated_plus_fire_level",
+      "text": "Cultivated: +1 to Level of Fire Skills",
+      "statKey": "plus_fire_skill_level",
+      "value": 1,
+      "appliesTo": ["cultivated_unique"],
+      "tags": ["fire", "gem_level", "cultivated"]
+    }
+  ],
+  "archetypes": [
+    {
+      "id": "archetype.fire_ignite_spell",
+      "name": "Fire Ignite Spell",
+      "tags": ["fire", "spell", "ignite", "ailment_magnitude", "damage_over_time"],
+      "preferredStats": ["fire", "spell", "ignite", "ailment_magnitude", "gem_level", "cast_speed"],
+      "forbiddenStats": ["minion"],
+      "budgetProfile": "starter"
+    },
+    {
+      "id": "archetype.poison_projectile_attack",
+      "name": "Poison Projectile Attack",
+      "tags": ["chaos", "poison", "attack", "projectile", "bow", "ailment_magnitude"],
+      "preferredStats": ["chaos", "poison", "attack", "projectile", "attack_speed", "ailment_magnitude"],
+      "forbiddenStats": ["spell"],
+      "budgetProfile": "starter"
+    },
+    {
+      "id": "archetype.physical_totem_attack",
+      "name": "Physical Totem Attack",
+      "tags": ["physical", "attack", "melee", "totem"],
+      "preferredStats": ["physical", "attack", "melee", "totem", "attack_speed"],
+      "forbiddenStats": ["spell"],
+      "budgetProfile": "mid"
+    }
+  ]
+}

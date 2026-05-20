@@ -15,12 +15,12 @@ This repository starts as a dependency-free JavaScript prototype. The first goal
 ```powershell
 node src/cli.js recommend "fire ignite spell starter balanced"
 node src/cli.js recommend "poison projectile bow mid damage" --format pretty
-node src/cli.js merge data/fixtures/game-data.json data/packs/curated-starter-pack.json data/merged/game-data.json
+node src/cli.js merge data/app/base-game-data.json data/packs/curated-starter-pack.json data/merged/game-data.json
 node src/cli.js recommend "cold projectile bow mid damage" --data data/merged/game-data.json --format pretty
 node src/cli.js diff data/snapshots/patch-0.json data/snapshots/patch-1.json
 node src/cli.js normalize data/raw/sample-source.json
 node src/cli.js import data/raw/sample-source.json
-node src/cli.js validate data/fixtures/game-data.json
+node src/cli.js validate data/app/base-game-data.json
 node src/cli.js normalize data/packs/curated-starter-pack.json
 node src/server.js
 node --test
@@ -73,7 +73,7 @@ PoE2 source data or curated patch scrape
 Run:
 
 ```powershell
-node src/cli.js validate data/fixtures/game-data.json
+node src/cli.js validate data/app/base-game-data.json
 ```
 
 Validation catches missing ids, duplicate ids, broken modifier references, invalid stages, loose support compatibility rules, invalid slot requirement shapes, and uncommon archetype tags.
@@ -83,7 +83,7 @@ Validation catches missing ids, duplicate ids, broken modifier references, inval
 Run:
 
 ```powershell
-node src/cli.js merge data/fixtures/game-data.json data/packs/curated-starter-pack.json data/merged/game-data.json
+node src/cli.js merge data/app/base-game-data.json data/packs/curated-starter-pack.json data/merged/game-data.json
 node src/cli.js recommend "cold projectile bow mid damage" --data data/merged/game-data.json --format pretty
 ```
 

@@ -6,7 +6,7 @@ Use this flow:
 
 ```powershell
 node src/cli.js normalize data/packs/curated-starter-pack.json
-node src/cli.js validate data/fixtures/game-data.json
+node src/cli.js validate data/app/base-game-data.json
 ```
 
 ## Record Kinds

@@ -4,7 +4,7 @@ import { extname, join, resolve } from "node:path";
 import { loadJson } from "./data/loadJson.js";
 import { recommendBuild } from "./generator/recommendationEngine.js";
 
-const DEFAULT_DATA_PATH = "data/fixtures/game-data.json";
+const DEFAULT_DATA_PATH = "data/app/base-game-data.json";
 const PUBLIC_DIR = resolve("public");
 const PORT = Number(process.env.PORT ?? 4173);
 const DATA_PATH = process.env.DATA_PATH ?? DEFAULT_DATA_PATH;

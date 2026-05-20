@@ -5,6 +5,7 @@ import { normalizeRawData } from "../src/data/normalize.js";
 import { validateGameData } from "../src/data/validateGameData.js";
 
 const gameData = JSON.parse(await readFile("data/fixtures/game-data.json", "utf8"));
+const appBaseData = JSON.parse(await readFile("data/app/base-game-data.json", "utf8"));
 const curatedPack = JSON.parse(await readFile("data/packs/curated-starter-pack.json", "utf8"));
 
 test("validates fixture game data", () => {
@@ -12,6 +13,15 @@ test("validates fixture game data", () => {
 
   assert.equal(report.valid, true);
   assert.equal(report.errors.length, 0);
+});
+
+test("validates app base game data without unique mocks", () => {
+  const report = validateGameData(appBaseData);
+
+  assert.equal(report.valid, true);
+  assert.equal(report.errors.length, 0);
+  assert.equal(appBaseData.uniqueItems.length, 0);
+  assert.equal(appBaseData.uniqueJewels.length, 0);
 });
 
 test("detects missing modifier references", () => {

@@ -9,7 +9,7 @@ import { validateGameData } from "./data/validateGameData.js";
 import { recommendBuild } from "./generator/recommendationEngine.js";
 import { affectedArchetypes, diffSnapshots, summarizePatchImpact } from "./patch/diffEngine.js";
 
-const DEFAULT_DATA_PATH = "data/fixtures/game-data.json";
+const DEFAULT_DATA_PATH = "data/app/base-game-data.json";
 
 async function main() {
   const [command, ...args] = process.argv.slice(2);

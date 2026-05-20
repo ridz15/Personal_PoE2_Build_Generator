@@ -18,6 +18,8 @@ node src/cli.js recommend "poison projectile bow mid damage" --format pretty
 node src/cli.js diff data/snapshots/patch-0.json data/snapshots/patch-1.json
 node src/cli.js normalize data/raw/sample-source.json
 node src/cli.js import data/raw/sample-source.json
+node src/cli.js validate data/fixtures/game-data.json
+node src/cli.js normalize data/packs/curated-starter-pack.json
 node src/server.js
 node --test
 ```
@@ -63,3 +65,13 @@ PoE2 source data or curated patch scrape
   -> patch snapshot
   -> diff and affected archetype detection
 ```
+
+## Validation
+
+Run:
+
+```powershell
+node src/cli.js validate data/fixtures/game-data.json
+```
+
+Validation catches missing ids, duplicate ids, broken modifier references, invalid stages, loose support compatibility rules, invalid slot requirement shapes, and uncommon archetype tags.

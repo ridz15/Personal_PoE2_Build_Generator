@@ -1,0 +1,45 @@
+{
+  "packVersion": "curated-starter-0",
+  "description": "Small curated data-pack example for manually maintained PoE2 build generator records.",
+  "records": [
+    {
+      "kind": "archetype",
+      "key": "cold_projectile_attack",
+      "displayName": "Cold Projectile Attack",
+      "tags": ["cold", "attack", "projectile", "bow"],
+      "preferredStats": ["cold", "attack", "projectile", "attack_speed", "critical"],
+      "forbiddenStats": ["minion"],
+      "budgetProfile": "starter"
+    },
+    {
+      "kind": "active_skill",
+      "key": "ice_shot_mock",
+      "displayName": "Ice Shot Prototype",
+      "tags": ["Cold", "Attack", "Projectile", "Bow", "Hit"],
+      "mechanics": ["Freeze"],
+      "scalesWith": ["Cold", "Attack", "Projectile", "Attack Speed", "Critical"]
+    },
+    {
+      "kind": "support",
+      "key": "cold_penetration_mock",
+      "displayName": "Cold Penetration Prototype",
+      "tags": ["Cold", "Damage"],
+      "requiresAllTags": ["Hit"],
+      "requiresAnyTags": ["Cold"],
+      "forbiddenTags": ["Minion"],
+      "mechanicRequirements": [],
+      "grants": ["Cold", "Penetration"],
+      "tier": "mid"
+    },
+    {
+      "kind": "modifier",
+      "key": "cold_damage",
+      "displayName": "increased Cold Damage",
+      "stat": "cold_damage",
+      "value": 22,
+      "appliesTo": ["Item", "Jewel"],
+      "tags": ["Cold", "Damage"]
+    }
+  ]
+}
+

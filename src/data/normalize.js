@@ -86,6 +86,20 @@ function normalizeRecord(record) {
     };
   }
 
+  if (record.kind === "archetype") {
+    return {
+      collection: "archetypes",
+      entity: {
+        id: `archetype.${normalizeTag(record.key ?? record.displayName)}`,
+        name: record.displayName,
+        tags: normalizeTags(record.tags),
+        preferredStats: normalizeTags(record.preferredStats),
+        forbiddenStats: normalizeTags(record.forbiddenStats),
+        budgetProfile: normalizeStage(record.budgetProfile)
+      }
+    };
+  }
+
   return null;
 }
 

@@ -26,3 +26,23 @@ test("creates patch snapshots from normalized data", () => {
   assert.ok(snapshot.entities.some((entity) => entity.type === "skill"));
   assert.ok(snapshot.entities.some((entity) => entity.type === "modifier"));
 });
+
+test("normalizes archetype records", () => {
+  const normalized = normalizeRawData({
+    records: [
+      {
+        kind: "archetype",
+        key: "fire_test",
+        displayName: "Fire Test",
+        tags: ["Fire"],
+        preferredStats: ["Fire Damage"],
+        forbiddenStats: ["Minion"],
+        budgetProfile: "mid"
+      }
+    ]
+  });
+
+  assert.equal(normalized.archetypes[0].id, "archetype.fire_test");
+  assert.deepEqual(normalized.archetypes[0].preferredStats, ["fire_damage"]);
+  assert.equal(normalized.archetypes[0].budgetProfile, "mid");
+});

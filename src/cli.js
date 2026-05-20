@@ -4,6 +4,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { loadJson } from "./data/loadJson.js";
 import { formatRecommendation } from "./format/pretty.js";
 import { normalizeRawData, toPatchSnapshot } from "./data/normalize.js";
+import { validateGameData } from "./data/validateGameData.js";
 import { recommendBuild } from "./generator/recommendationEngine.js";
 import { affectedArchetypes, diffSnapshots, summarizePatchImpact } from "./patch/diffEngine.js";
 
@@ -29,6 +30,11 @@ async function main() {
 
   if (command === "import") {
     await importData(args[0], args[1]);
+    return;
+  }
+
+  if (command === "validate") {
+    await validate(args[0]);
     return;
   }
 
@@ -103,6 +109,34 @@ async function importData(rawPath, outPath = "data/normalized/imported-game-data
   console.log(`Imported ${rawPath} -> ${outPath}`);
 }
 
+async function validate(path = DEFAULT_DATA_PATH) {
+  const gameData = await loadJson(resolve(path));
+  const report = validateGameData(gameData);
+
+  console.log(formatValidationReport(report, path));
+  if (!report.valid) {
+    process.exitCode = 1;
+  }
+}
+
+function formatValidationReport(report, path) {
+  const lines = [];
+  lines.push(`Validation: ${path}`);
+  lines.push(report.valid ? "Status: valid" : "Status: invalid");
+  lines.push(`Errors: ${report.errors.length}`);
+  lines.push(`Warnings: ${report.warnings.length}`);
+
+  for (const error of report.errors) {
+    lines.push(`ERROR ${error.code}: ${error.message}`);
+  }
+
+  for (const warning of report.warnings) {
+    lines.push(`WARN ${warning.code}: ${warning.message}`);
+  }
+
+  return lines.join("\n");
+}
+
 function resolvePathDirectory(path) {
   return path.replace(/[\\/][^\\/]+$/u, "");
 }
@@ -136,7 +170,8 @@ function printUsage() {
   node src/cli.js recommend "poison projectile bow mid damage" --format pretty
   node src/cli.js diff data/snapshots/patch-0.json data/snapshots/patch-1.json
   node src/cli.js normalize data/raw/sample-source.json
-  node src/cli.js import data/raw/sample-source.json`);
+  node src/cli.js import data/raw/sample-source.json
+  node src/cli.js validate data/fixtures/game-data.json`);
 }
 
 main().catch((error) => {

@@ -1,6 +1,7 @@
 node_modules/
 coverage/
 data/normalized/
+data/merged/
 server.out.log
 server.err.log
 .env

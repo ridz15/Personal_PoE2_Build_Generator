@@ -104,7 +104,7 @@ export function scoreItemCandidate(request, archetypes, item, gameData = {}, ski
     countIntersection(item.roles ?? [], request.tags ?? []) > 0;
   const budgetPenalty = stagePenalty(item.stage, request.budget);
   const unavailablePenalty = isAllowedForBudget(item.stage, request.budget) ? 0 : 15;
-  const roleBonus = countIntersection(item.roles ?? [], ["build_enabler", "scaling_multiplier"]) * 12;
+  const roleBonus = hasDirectMatch ? countIntersection(item.roles ?? [], ["build_enabler", "scaling_multiplier"]) * 12 : 0;
   const slotPenalty = slotCompatibility.isCompatible ? 0 : 120;
   const score =
     requestMatches * 18 +
@@ -134,7 +134,7 @@ export function scoreItemCandidate(request, archetypes, item, gameData = {}, ski
       ...modifierMatches.map((modifier) => `matched modifier ${modifier.text}`),
       ...((item.buildEnablers ?? []).filter((tag) => archetypeTags.includes(tag)).map((tag) => `enables ${tag}`)),
       slotPriority > 0 && hasDirectMatch ? `slot ${item.slot ?? "jewel"} has priority for this build` : null,
-      ...(slotCompatibility.reasons ?? []),
+      ...(hasDirectMatch ? slotCompatibility.reasons ?? [] : []),
       item.stage && !isAllowedForBudget(item.stage, request.budget) ? `above ${request.budget} budget` : null
     ])
   };

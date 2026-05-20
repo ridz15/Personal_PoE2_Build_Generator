@@ -7,6 +7,7 @@ import { recommendBuild } from "./generator/recommendationEngine.js";
 const DEFAULT_DATA_PATH = "data/fixtures/game-data.json";
 const PUBLIC_DIR = resolve("public");
 const PORT = Number(process.env.PORT ?? 4173);
+const DATA_PATH = process.env.DATA_PATH ?? DEFAULT_DATA_PATH;
 
 const MIME_TYPES = {
   ".html": "text/html; charset=utf-8",
@@ -15,7 +16,7 @@ const MIME_TYPES = {
   ".json": "application/json; charset=utf-8"
 };
 
-const gameData = await loadJson(resolve(DEFAULT_DATA_PATH));
+const gameData = await loadJson(resolve(DATA_PATH));
 
 const server = http.createServer(async (request, response) => {
   try {
@@ -33,6 +34,7 @@ const server = http.createServer(async (request, response) => {
 
 server.listen(PORT, () => {
   console.log(`PoE2 Build Generator running at http://localhost:${PORT}`);
+  console.log(`Using data: ${DATA_PATH}`);
 });
 
 async function handleRecommend(request, response) {
@@ -82,4 +84,3 @@ function readRequestBody(request) {
     request.on("error", reject);
   });
 }
-

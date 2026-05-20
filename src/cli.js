@@ -2,6 +2,7 @@
 import { resolve } from "node:path";
 import { mkdir, writeFile } from "node:fs/promises";
 import { loadJson } from "./data/loadJson.js";
+import { mergeGameData } from "./data/mergeGameData.js";
 import { formatRecommendation } from "./format/pretty.js";
 import { normalizeRawData, toPatchSnapshot } from "./data/normalize.js";
 import { validateGameData } from "./data/validateGameData.js";
@@ -19,7 +20,7 @@ async function main() {
   }
 
   if (command === "diff") {
-    await diff(args[0], args[1]);
+    await diff(args);
     return;
   }
 
@@ -38,6 +39,11 @@ async function main() {
     return;
   }
 
+  if (command === "merge") {
+    await merge(args);
+    return;
+  }
+
   printUsage();
   process.exitCode = 1;
 }
@@ -49,7 +55,7 @@ async function recommend(args) {
     throw new Error("Missing build request. Example: node src/cli.js recommend \"fire ignite spell starter\"");
   }
 
-  const gameData = await loadJson(resolve(DEFAULT_DATA_PATH));
+  const gameData = await loadJson(resolve(options.data ?? DEFAULT_DATA_PATH));
   const result = recommendBuild(input, gameData);
 
   if (options.format === "pretty" || options.pretty) {
@@ -60,7 +66,9 @@ async function recommend(args) {
   console.log(JSON.stringify(result, null, 2));
 }
 
-async function diff(previousPath, nextPath) {
+async function diff(args) {
+  const { values, options } = parseArgs(args);
+  const [previousPath, nextPath] = values;
   if (!previousPath || !nextPath) {
     throw new Error("Missing snapshot paths. Example: node src/cli.js diff data/snapshots/patch-0.json data/snapshots/patch-1.json");
   }
@@ -68,7 +76,7 @@ async function diff(previousPath, nextPath) {
   const [previousSnapshot, nextSnapshot, gameData] = await Promise.all([
     loadJson(resolve(previousPath)),
     loadJson(resolve(nextPath)),
-    loadJson(resolve(DEFAULT_DATA_PATH))
+    loadJson(resolve(options.data ?? DEFAULT_DATA_PATH))
   ]);
 
   const patchDiff = diffSnapshots(previousSnapshot, nextSnapshot);
@@ -119,6 +127,41 @@ async function validate(path = DEFAULT_DATA_PATH) {
   }
 }
 
+async function merge(args) {
+  const { values, options } = parseArgs(args);
+  const [basePath, packPath, outPath] = values;
+
+  if (!basePath || !packPath || !outPath) {
+    throw new Error("Missing merge paths. Example: node src/cli.js merge data/fixtures/game-data.json data/packs/curated-starter-pack.json data/merged/game-data.json");
+  }
+
+  const [baseData, rawPack] = await Promise.all([
+    loadJson(resolve(basePath)),
+    loadJson(resolve(packPath))
+  ]);
+  const incomingData = normalizeRawData(rawPack);
+  const mergeResult = mergeGameData(baseData, incomingData, { strategy: options.strategy ?? "error" });
+
+  if (!mergeResult.ok) {
+    console.log(formatMergeReport(mergeResult.report));
+    throw new Error("Merge conflicts detected. Use --strategy skip or --strategy replace.");
+  }
+
+  const validation = validateGameData(mergeResult.merged);
+  if (!validation.valid) {
+    console.log(formatValidationReport(validation, outPath));
+    throw new Error("Merged data failed validation.");
+  }
+
+  const destination = resolve(outPath);
+  await mkdir(resolvePathDirectory(destination), { recursive: true });
+  await writeFile(destination, `${JSON.stringify(mergeResult.merged, null, 2)}\n`, "utf8");
+
+  console.log(formatMergeReport(mergeResult.report));
+  console.log(formatValidationReport(validation, outPath));
+  console.log(`Merged ${packPath} -> ${outPath}`);
+}
+
 function formatValidationReport(report, path) {
   const lines = [];
   lines.push(`Validation: ${path}`);
@@ -135,6 +178,17 @@ function formatValidationReport(report, path) {
   }
 
   return lines.join("\n");
+}
+
+function formatMergeReport(report) {
+  return [
+    "Merge report:",
+    `Added: ${report.added.length}`,
+    `Replaced: ${report.replaced.length}`,
+    `Skipped: ${report.skipped.length}`,
+    `Conflicts: ${report.conflicts.length}`,
+    ...report.conflicts.map((conflict) => `CONFLICT ${conflict.collection}.${conflict.id}`)
+  ].join("\n");
 }
 
 function resolvePathDirectory(path) {
@@ -158,6 +212,18 @@ function parseArgs(args) {
       continue;
     }
 
+    if (arg === "--data") {
+      options.data = args[index + 1];
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--strategy") {
+      options.strategy = args[index + 1];
+      index += 1;
+      continue;
+    }
+
     values.push(arg);
   }
 
@@ -168,10 +234,12 @@ function printUsage() {
   console.log(`Usage:
   node src/cli.js recommend "fire ignite spell starter balanced"
   node src/cli.js recommend "poison projectile bow mid damage" --format pretty
+  node src/cli.js recommend "cold projectile bow mid damage" --data data/merged/game-data.json --format pretty
   node src/cli.js diff data/snapshots/patch-0.json data/snapshots/patch-1.json
   node src/cli.js normalize data/raw/sample-source.json
   node src/cli.js import data/raw/sample-source.json
-  node src/cli.js validate data/fixtures/game-data.json`);
+  node src/cli.js validate data/fixtures/game-data.json
+  node src/cli.js merge data/fixtures/game-data.json data/packs/curated-starter-pack.json data/merged/game-data.json`);
 }
 
 main().catch((error) => {

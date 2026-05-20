@@ -14,7 +14,10 @@ function topArchetypes(request, archetypes) {
     .slice(0, 3);
 
   const focused = ranked.filter((archetype) => archetype.recommendation.score >= 30);
-  return focused.length > 0 ? focused : ranked.slice(0, 1);
+  if (focused.length === 0) return ranked.slice(0, 1);
+
+  const topScore = focused[0].recommendation.score;
+  return focused.filter((archetype) => archetype.recommendation.score >= topScore * 0.8);
 }
 
 export function recommendBuild(input, gameData) {
